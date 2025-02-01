@@ -1,0 +1,15 @@
+@use 'variables' as *;
+@use 'mixins' as m;
+
+.planets {
+  &__actions {
+    margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+
+    & > button {
+      @include m.custom-button($color-white, $color-black);
+    }
+  }
+}

@@ -1,0 +1,12 @@
+<div class="planet-item">
+  <header class="planet-item__header">
+    <img
+      class="planet-item__img"
+      [src]="'/images/' + planet().id + '.jpg'"
+      [alt]="planet().englishName"
+    />
+  </header>
+  <div class="planet-item__body">
+    <p class="planet-item__name">{{ planet().englishName }}</p>
+  </div>
+</div>

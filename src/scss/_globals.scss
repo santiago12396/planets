@@ -8,10 +8,13 @@ html {
   box-sizing: inherit;
 }
 body {
-  background-image: url('/images/galaxy.jpg');
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-size: 1.6rem;
   line-height: 1.5;
+  background-image: url('/images/galaxy.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 img {
   display: block;
@@ -21,8 +24,13 @@ a {
   text-decoration: none;
   cursor: pointer;
 }
-.container {
+[class$="__container"] {
   max-width: 140rem;
   margin: auto;
   width: 90%;
+
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }

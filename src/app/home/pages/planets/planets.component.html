@@ -1,1 +1,17 @@
-<p>planets works!</p>,
+<div class="planets">
+  <main class="planets__container">
+    <div class="planets__list">
+      <swiper-container #swiper slides-per-view="5" space-between="20">
+        @for (planet of planets(); track planet.id) {
+          <swiper-slide>
+            <app-planet-item [planet]="planet" />
+          </swiper-slide>
+        }
+      </swiper-container>
+    </div>
+    <div class="planets__actions">
+      <button (click)="handlePrevButton()" [disabled]="isPrevDisabled()">Anterior</button>
+      <button (click)="handleNextButton()" [disabled]="isNextDisabled()">Siguiente</button>
+    </div>
+  </main>
+</div>
