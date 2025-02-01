@@ -2,10 +2,16 @@
   <main class="planets__container">
     <div class="planets__list">
       <swiper-container #swiper slides-per-view="5" space-between="20">
-        @for (planet of planets(); track planet.id) {
-          <swiper-slide>
-            <app-planet-item [planet]="planet" />
-          </swiper-slide>
+        @if (isLoadingResults()) {
+          <div class="loader">
+            <app-loader />
+          </div>
+        } @else {
+          @for (planet of planets(); track planet.id) {
+            <swiper-slide>
+              <app-planet-item [planet]="planet" />
+            </swiper-slide>
+          }
         }
       </swiper-container>
     </div>

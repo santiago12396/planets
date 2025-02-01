@@ -1,6 +1,12 @@
 @use 'variables' as *;
 @use 'mixins' as m;
 
+.loader {
+  height: 36.7rem;
+  width: 100%;
+  display: grid;
+  place-items: center;
+}
 .planets {
   &__actions {
     margin-top: 2rem;
