@@ -22,8 +22,8 @@ export class OrderByComponent {
     { key: Order.Desc, label: 'Descendente' },
   ]);
 
-  sortBy = model<string>('englishName');
-  order = model<Order>(Order.Asc);
+  sortBy = model.required<string>();
+  order = model.required<Order>();
 
   handleChangeSortBy() {
     this.sortByChange.emit(this.sortBy());

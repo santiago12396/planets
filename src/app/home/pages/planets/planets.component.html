@@ -3,10 +3,12 @@
     <header class="planets__filters">
       <app-order-by
         [disabled]="planets().length === 0"
+        [sortBy]="sortBy()"
+        [order]="order()"
         (sortByChange)="handleSortBy($event)"
         (orderChange)="handleOrder($event)"
       />
-      <app-search-input (searchTermChange)="handleSearchTerm($event)" />
+      <app-search-input [searchTerm]="query()" (searchTermChange)="handleSearchTerm($event)" />
     </header>
 
     <div class="planets__list">

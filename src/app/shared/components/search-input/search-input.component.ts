@@ -11,7 +11,7 @@ import { FormsModule } from '@angular/forms';
 export class SearchInputComponent {
   searchTermChange = output<string>();
 
-  searchTerm = model<string>('');
+  searchTerm = model.required<string>();
 
   handleChangeSearchTerm() {
     this.searchTermChange.emit(this.searchTerm());

@@ -20,13 +20,14 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { PlanetItemComponent } from '@/shared/components/planet-item/planet-item.component';
 import { SolarSystemService } from '@/shared/services/solar-system.service';
-import { Body, BodyResponse, Order } from '@/shared/models';
+import { PlanetItemComponent } from '@/shared/components/planet-item/planet-item.component';
 import { LoaderComponent } from '@/shared/components/loader/loader.component';
 import { SearchInputComponent } from '@/shared/components/search-input/search-input.component';
 import { OrderByComponent } from '@/shared/components/order-by/order-by.component';
+import { Body, BodyResponse, Order } from '@/shared/models';
 
 @Component({
   selector: 'app-planets',
@@ -39,6 +40,8 @@ import { OrderByComponent } from '@/shared/components/order-by/order-by.componen
 export default class PlanetsComponent implements OnInit, AfterViewInit {
   readonly swiper = viewChild.required<ElementRef<unknown>>('swiper');
 
+  readonly #router = inject(Router);
+  readonly #route = inject(ActivatedRoute);
   readonly #solarSystemService = inject(SolarSystemService);
 
   planets = linkedSignal<Body[]>(() => []);
@@ -54,8 +57,17 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
 
   #searchSubject = new Subject<string>();
 
+  constructor() {
+    this.#route.queryParams.subscribe(params => {
+      const { order, query } = params;
+
+      if (order) this.order.set(order);
+      if (query) this.query.set(query);
+    });
+  }
+
   ngOnInit(): void {
-    // Carga inicial
+    // Cuando se inicializa el componente
     this.#fetchAndSetPlanets();
 
     // Cuando cambia el buscador
@@ -111,21 +123,35 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
     });
   }
 
+  #updateUrlParams() {
+    this.#router.navigate([], {
+      relativeTo: this.#route,
+      queryParams: {
+        order: this.order(),
+        query: this.query(),
+      },
+      queryParamsHandling: 'merge', // Mantiene y actualiza solo los parametros que cambiaron
+    });
+  }
+
   handleSearchTerm(value: string) {
     if (!value) this.currentPage.set(1);
 
     this.query.set(value);
     this.#searchSubject.next(value);
+    this.#updateUrlParams();
   }
 
   handleSortBy(value: string) {
     this.sortBy.set(value);
     this.#fetchAndSetPlanets();
+    this.#updateUrlParams();
   }
 
   handleOrder(value: Order) {
     this.order.set(value);
     this.#fetchAndSetPlanets();
+    this.#updateUrlParams();
   }
 
   handlePrevButton() {
