@@ -2,7 +2,7 @@
 @use 'mixins' as m;
 
 .loader {
-  height: 36.7rem;
+  height: 38.5rem;
   width: 100%;
   display: grid;
   place-items: center;
@@ -11,7 +11,7 @@
   width: 100%;
 
   & > img {
-    height: 36.7rem;
+    height: 38.5rem;
     margin: 0 auto;
   }
 }

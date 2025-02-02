@@ -1,4 +1,9 @@
-<div class="planet-item">
+<div
+  class="planet-item"
+  tabindex="0"
+  (keydown.enter)="handleViewPlanet(planet().id)"
+  (click)="handleViewPlanet(planet().id)"
+>
   <header class="planet-item__header">
     <img
       class="planet-item__img"
@@ -7,6 +12,6 @@
     />
   </header>
   <div class="planet-item__body">
-    <p class="planet-item__name">{{ planet().englishName }}</p>
+    <h2 class="planet-item__name">{{ planet().englishName }}</h2>
   </div>
 </div>

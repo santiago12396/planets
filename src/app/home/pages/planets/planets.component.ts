@@ -107,7 +107,7 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
     this.isLoadingResults.set(true);
     this.isFetching.set(true);
 
-    return this.#solarSystemService.getPlanets(this.#getFilter()).pipe(
+    return this.#solarSystemService.findAll(this.#getFilter()).pipe(
       map((response: BodyResponse) => {
         this.isLoadingResults.set(false);
         this.isFetching.set(false);

@@ -2,7 +2,8 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
-import { BodyResponse, Filter } from '../models';
+import { Body, BodyResponse, Filter } from '../models';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,7 @@ export class SolarSystemService {
   readonly #http = inject(HttpClient);
   readonly #apiUrl = environment.apiUrl;
 
-  getPlanets(filter: Filter) {
+  findAll(filter: Filter): Observable<BodyResponse> {
     const { currentPage, limit, sortBy, order, query } = filter;
 
     const filters = ['isPlanet,eq,true', `${sortBy},cs,${query}`];
@@ -25,5 +26,9 @@ export class SolarSystemService {
     });
 
     return this.#http.get<BodyResponse>(`${this.#apiUrl}/bodies`, { params });
+  }
+
+  findOne(id: string): Observable<Body> {
+    return this.#http.get<Body>(`${this.#apiUrl}/bodies/${id}`);
   }
 }

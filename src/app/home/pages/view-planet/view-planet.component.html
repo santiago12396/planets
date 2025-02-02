@@ -1,1 +1,63 @@
-<p>view-planet works!</p>,
+<div class="view-planet">
+  @if (isLoadingResults()) {
+    <div class="loader">
+      <app-loader />
+    </div>
+  } @else {
+    @if (isError()) {
+      <app-not-found />
+    } @else {
+      @if (planet()) {
+        <main class="view-planet__container">
+          <div class="view-planet__wrap-img">
+            <img
+              class="planet-item__img"
+              [src]="'/images/' + planet()!.id + '.jpg'"
+              [alt]="planet()!.englishName"
+            />
+          </div>
+          <div class="view-planet__data">
+            <h2 class="view-planet__name">{{ planet()!.englishName }}</h2>
+
+            <div class="view-planet__info">
+              <ul>
+                <li>
+                  <span class="view-planet__title">Masa:</span>
+                  {{ planet()!.mass?.massValue }} X 10<sup>{{ planet()!.mass?.massExponent }}</sup>
+                  kg
+                </li>
+                <li>
+                  <span class="view-planet__title">Temperatura Media:</span>
+                  {{ planet()!.avgTemp }} K
+                </li>
+                <li>
+                  <span class="view-planet__title">Radio Medio:</span>
+                  {{ planet()!.meanRadius }} km
+                </li>
+                <li>
+                  <span class="view-planet__title">Gravedad:</span>
+                  {{ planet()!.gravity }} m/s²
+                </li>
+                <li>
+                  <span class="view-planet__title">Órbita Sideral:</span>
+                  {{ planet()!.sideralOrbit }} días
+                </li>
+                <li>
+                  <span class="view-planet__title">Rotación Sideral:</span>
+                  {{ planet()!.sideralRotation }} horas
+                </li>
+              </ul>
+              @if (planet()!.moons?.length) {
+                <span class="view-planet__title">Número de Lunas:</span>
+                {{ planet()!.moons?.length }}
+              }
+            </div>
+            <div class="view-planet__actions">
+              <button routerLink="/planetas">Volver</button>
+            </div>
+          </div>
+        </main>
+      }
+    }
+  }
+</div>
