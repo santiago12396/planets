@@ -29,15 +29,16 @@
   padding: 1.2rem 2.2rem;
   text-align: center;
   border-radius: .5rem;
-  cursor: pointer;
 
   &:hover {
       background-color: darken($background, 10%);
   }
+  &:not(:disabled) {
+    cursor: pointer;
+  }
   &:disabled {
     background-color: lighten($background, 20%);
     color: darken($text-color, 30%);
-    cursor: not-allowed;
     opacity: .6;
   }
 }

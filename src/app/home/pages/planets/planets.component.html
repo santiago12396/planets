@@ -1,7 +1,11 @@
 <div class="planets">
   <main class="planets__container">
     <header class="planets__filters">
-      <div></div>
+      <app-order-by
+        [disabled]="planets().length === 0"
+        (sortByChange)="handleSortBy($event)"
+        (orderChange)="handleOrder($event)"
+      />
       <app-search-input (searchTermChange)="handleSearchTerm($event)" />
     </header>
 

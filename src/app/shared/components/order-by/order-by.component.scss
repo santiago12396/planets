@@ -1,0 +1,16 @@
+select {
+  padding: .8rem 1.2rem;
+  font-size: 1.4rem;
+  border: .1rem solid #ccc;
+  border-radius: .4rem;
+  background-color: #fff;
+}
+select:focus {
+  outline: none;
+}
+.form {
+  &__sort-by {
+    display: flex;
+    gap: 1rem;
+  }
+}

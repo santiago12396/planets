@@ -26,10 +26,11 @@ import { SolarSystemService } from '@/shared/services/solar-system.service';
 import { Body, BodyResponse, Order } from '@/shared/models';
 import { LoaderComponent } from '@/shared/components/loader/loader.component';
 import { SearchInputComponent } from '@/shared/components/search-input/search-input.component';
+import { OrderByComponent } from '@/shared/components/order-by/order-by.component';
 
 @Component({
   selector: 'app-planets',
-  imports: [PlanetItemComponent, LoaderComponent, SearchInputComponent],
+  imports: [PlanetItemComponent, LoaderComponent, SearchInputComponent, OrderByComponent],
   templateUrl: './planets.component.html',
   styleUrl: './planets.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -55,7 +56,7 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     // Carga inicial
-    this.#loadData().subscribe(planets => this.planets.set(planets));
+    this.#fetchAndSetPlanets();
 
     // Cuando cambia el buscador
     this.#searchSubject
@@ -103,9 +104,28 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
     );
   }
 
+  #fetchAndSetPlanets() {
+    this.#loadData().subscribe({
+      next: planets => this.planets.set(planets),
+      error: () => this.#noData(),
+    });
+  }
+
   handleSearchTerm(value: string) {
+    if (!value) this.currentPage.set(1);
+
     this.query.set(value);
     this.#searchSubject.next(value);
+  }
+
+  handleSortBy(value: string) {
+    this.sortBy.set(value);
+    this.#fetchAndSetPlanets();
+  }
+
+  handleOrder(value: Order) {
+    this.order.set(value);
+    this.#fetchAndSetPlanets();
   }
 
   handlePrevButton() {
@@ -116,7 +136,7 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
       );
 
       this.currentPage.set(this.currentPage() - 1);
-      this.#loadData().subscribe(planets => this.planets.set(planets));
+      this.#fetchAndSetPlanets();
     }
   }
 
@@ -128,15 +148,15 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
       (this.swiper().nativeElement as SwiperContainer).swiper.slideTo(currentPage * this.limit());
 
       this.currentPage.set(currentPage + 1);
-      this.#loadData().subscribe(planets => this.planets.set(planets));
+      this.#fetchAndSetPlanets();
     }
   }
 
   isPrevDisabled(): boolean {
-    return this.currentPage() === 1;
+    return this.currentPage() === 1 || this.planets().length === 0;
   }
 
   isNextDisabled(): boolean {
-    return this.planets().length < this.limit();
+    return this.planets().length < this.limit() || this.planets().length === 0;
   }
 }

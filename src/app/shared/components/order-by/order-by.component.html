@@ -1,0 +1,24 @@
+<form class="form">
+  <div class="form__sort-by">
+    <select
+      name="sort-by"
+      [disabled]="disabled()"
+      (ngModelChange)="handleChangeSortBy()"
+      [(ngModel)]="sortBy"
+    >
+      @for (sortBy of sortByOptions(); track sortBy.key) {
+        <option [value]="sortBy.key">{{ sortBy.label }}</option>
+      }
+    </select>
+    <select
+      name="order"
+      [disabled]="disabled()"
+      (ngModelChange)="handleChangeOrder()"
+      [(ngModel)]="order"
+    >
+      @for (order of orderOptions(); track order.key) {
+        <option [value]="order.key">{{ order.label }}</option>
+      }
+    </select>
+  </div>
+</form>

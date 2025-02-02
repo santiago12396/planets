@@ -9,8 +9,9 @@ import { FormsModule } from '@angular/forms';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchInputComponent {
-  searchTerm = model<string>('');
   searchTermChange = output<string>();
+
+  searchTerm = model<string>('');
 
   handleChangeSearchTerm() {
     this.searchTermChange.emit(this.searchTerm());
