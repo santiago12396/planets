@@ -1,5 +1,10 @@
 <div class="planets">
   <main class="planets__container">
+    <header class="planets__filters">
+      <div></div>
+      <app-search-input (searchTermChange)="handleSearchTerm($event)" />
+    </header>
+
     <div class="planets__list">
       <swiper-container #swiper slides-per-view="5" space-between="20">
         @if (isLoadingResults()) {
@@ -11,6 +16,10 @@
             <swiper-slide>
               <app-planet-item [planet]="planet" />
             </swiper-slide>
+          } @empty {
+            <div class="no-data">
+              <img src="/images/no-data.svg" alt="sin datos" />
+            </div>
           }
         }
       </swiper-container>

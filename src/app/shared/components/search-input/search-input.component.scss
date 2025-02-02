@@ -1,0 +1,19 @@
+@use 'mixins' as m;
+
+:host {
+  margin-left: auto;
+}
+input {
+  width: 100%;
+  padding: 1.5rem 1.2rem;
+  border: .1rem solid #ccc;
+  border-radius: 1rem;
+}
+@include m.tablet {
+  input {
+    width: 32rem;
+  }
+}
+input:focus {
+  outline: none;
+}

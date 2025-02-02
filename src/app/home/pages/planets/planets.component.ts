@@ -1,5 +1,13 @@
 import type { SwiperContainer } from 'swiper/element';
-import { EMPTY, map, Observable } from 'rxjs';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  EMPTY,
+  map,
+  Observable,
+  Subject,
+  switchMap,
+} from 'rxjs';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -17,10 +25,11 @@ import { PlanetItemComponent } from '@/shared/components/planet-item/planet-item
 import { SolarSystemService } from '@/shared/services/solar-system.service';
 import { Body, BodyResponse, Order } from '@/shared/models';
 import { LoaderComponent } from '@/shared/components/loader/loader.component';
+import { SearchInputComponent } from '@/shared/components/search-input/search-input.component';
 
 @Component({
   selector: 'app-planets',
-  imports: [PlanetItemComponent, LoaderComponent],
+  imports: [PlanetItemComponent, LoaderComponent, SearchInputComponent],
   templateUrl: './planets.component.html',
   styleUrl: './planets.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,12 +51,31 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
   order = signal(Order.Asc);
   query = signal('');
 
+  #searchSubject = new Subject<string>();
+
   ngOnInit(): void {
+    // Carga inicial
     this.#loadData().subscribe(planets => this.planets.set(planets));
+
+    // Cuando cambia el buscador
+    this.#searchSubject
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged(),
+        switchMap(() => this.#loadData())
+      )
+      .subscribe({
+        next: planets => this.planets.set(planets),
+        error: () => this.#noData(),
+      });
   }
 
   ngAfterViewInit(): void {
     (this.swiper().nativeElement as SwiperContainer).initialize();
+  }
+
+  #noData() {
+    this.isLoadingResults.set(false);
   }
 
   #getFilter() {
@@ -73,6 +101,11 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
         return response.bodies;
       })
     );
+  }
+
+  handleSearchTerm(value: string) {
+    this.query.set(value);
+    this.#searchSubject.next(value);
   }
 
   handlePrevButton() {

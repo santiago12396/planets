@@ -7,7 +7,25 @@
   display: grid;
   place-items: center;
 }
+.no-data {
+  width: 100%;
+
+  & > img {
+    height: 36.7rem;
+    margin: 0 auto;
+  }
+}
 .planets {
+  &__list {
+    padding: 2rem 0;
+  }
+  &__filters {
+    height: 10rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    align-items: center;
+    gap: 1rem;
+  }
   &__actions {
     margin-top: 2rem;
     display: flex;
