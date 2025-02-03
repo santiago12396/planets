@@ -1,59 +1,66 @@
-# Planets
+# Planetas App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+Este es el proyecto **Planetas App**, una aplicación desarrollada con Angular version 19.1.5.
 
-## Development server
+## 🌐 URL de Producción
 
-To start a local development server, run:
+Puedes ver la versión en producción de la aplicación en el siguiente enlace:
 
-```bash
-ng serve
+[https://santiago-lorduy.netlify.app/](https://santiago-lorduy.netlify.app/)
+
+## APIs utilizadas
+
+- [The Solar System OpenData](https://api.le-systeme-solaire.net/swagger/): Para obtener datos sobre los planetas del sistema solar.
+
+## Requisitos 📋
+
+Asegúrate de tener instalados los siguientes componentes en tu sistema:
+
+- [Node.js](https://nodejs.org/) (versión 18 o superior).
+- [Angular CLI](https://angular.dev/tools/cli) (versión >= 19.1.5) (opcional).
+
+## Instalación 🔧
+
+Para ejecuta el proyecto primero tienes que instalar los modulos de node:
+
+`npm install`
+
+## Ejecutar el Proyecto 🚀
+
+Para iniciar la aplicación en entorno de desarrollo, sigue estos pasos:
+
+- Ejecuta el siguiente comando para iniciar el servidor de desarrollo:
+
+  `npm start` o si tienes instalado el Angular CLI puedes utilizar `ng serve`.
+
+- Abre tu navegador y navega a http://localhost:4200.
+
+## Decisiones técnicas 💡
+
+1. **No se integró la API oficial de la NASA**:
+
+   - La API de la NASA no proporciona un endpoint que devuelva todos los planetas en una sola petición.
+   - La mayoría de los endpoints de la NASA devuelven la información en texto plano, a pesar de que se especifique en los parámetros de la petición que se desea recibir la respuesta en formato JSON.
+
+2. **No se integró una API de imágenes como "images.nasa.gov"**:
+
+   - Ninguna de las APIs consultadas proporcionaba información de los planetas junto con sus respectivas imágenes.
+   - Decidí no integrar una API de imágenes externa para evitar realizar una petición adicional por cada planeta, lo que generaría una carga innecesaria y afectaría el rendimiento de la página.
+
+3. **No se implementó la funcionalidad de filtrado por "Todos" o "Favoritos"**:
+   - La API utilizada no soporta filtros con múltiples "matchers" a la vez. Si intentamos hacerlo, se devolvería uno u otro filtro dependiendo de su prioridad especificada, Además, realizar consultas individuales para cada planeta añadido como favorito no sería eficiente, especialmente cuando se pueden tener muchos planetas en la lista de favoritos.
+
+### Ejemplo del filtro probado
+
+Intenté realizar un filtro para obtener solo los datos de planetas que coincidan con los IDs de los planetas seleccionados como favoritos:
+
+```text
+order: englishName,asc
+page: 1,5
+filter[]: isPlanet,eq,true
+filter[]: id,eq,terre
+filter[]: id,eq,venus
+filter[]: id,eq,mars
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Este filtro no devolvía resultados. Si agregaba la bandera **"satisfy: any"** en los parámetros, funcionaba, pero rompía la lógica de negocio, ya que no respetaría el cumplimiento de los múltiples filtros a la vez.
