@@ -2,7 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
-import { Body, BodyResponse, Filter } from '../models';
+import { Body, BodyResponse, Filter, Order } from '../models';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,7 +13,13 @@ export class SolarSystemService {
   readonly #apiUrl = environment.apiUrl;
 
   findAll(filter: Filter): Observable<BodyResponse> {
-    const { currentPage, limit, sortBy, order, query } = filter;
+    const {
+      currentPage = 1,
+      limit = 5,
+      sortBy = 'englishName',
+      order = Order.Asc,
+      query = '',
+    } = filter;
 
     const filters = ['isPlanet,eq,true', `${sortBy},cs,${query}`];
 

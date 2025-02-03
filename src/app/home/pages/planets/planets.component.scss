@@ -2,7 +2,7 @@
 @use 'mixins' as m;
 
 .loader {
-  height: 38.5rem;
+  height: 38.48rem;
   width: 100%;
   display: grid;
   place-items: center;
@@ -11,7 +11,7 @@
   width: 100%;
 
   & > img {
-    height: 38.5rem;
+    height: 38.48rem;
     margin: 0 auto;
   }
 }
@@ -19,7 +19,7 @@
   &__list {
     padding: 2rem 0;
   }
-  &__filters {
+  &__header {
     height: 10rem;
     display: grid;
     grid-template-columns: repeat(2, 1fr);

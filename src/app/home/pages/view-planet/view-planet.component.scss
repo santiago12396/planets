@@ -1,6 +1,17 @@
 @use 'variables' as *;
 @use 'mixins' as m;
 
+
+.heart-icon {
+  height: 2rem;
+  width: 2rem;
+  fill: none;
+  transition: fill .3s ease-in-out, transform .3s ease-in-out;
+}
+.filled {
+  fill: red;
+  transform: scale(1.1);
+}
 .view-planet {
   height: 100dvh;
   display: grid;
@@ -21,6 +32,21 @@
     backdrop-filter: blur(.2rem);
     text-shadow: .2rem .2rem .8rem rgba(0, 0, 0, .8);
   }
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+  }
+  :is(&__btn-favorites, &__btn-back)  {
+    @include m.custom-button($color-white, $color-black);
+  }
+  &__btn-favorites {
+    width: 20.9rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
   &__name {
     font-size: 5rem;
   }
@@ -35,8 +61,7 @@
   }
   &__actions {
     margin-top: 3rem;
-    & > button {
-      @include m.custom-button($color-white, $color-black);
-    }
+    display: flex;
+    justify-content: center;
   }
 }
