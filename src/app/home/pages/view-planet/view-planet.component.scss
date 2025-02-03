@@ -1,7 +1,11 @@
 @use 'variables' as *;
 @use 'mixins' as m;
 
-
+.loader {
+  height: 100%;
+  display: grid;
+  place-content: center;
+}
 .heart-icon {
   height: 2rem;
   width: 2rem;
@@ -14,29 +18,58 @@
 }
 .view-planet {
   height: 100dvh;
-  display: grid;
-  place-content: center;
 
-  &__container {
-    height: 64rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
-  }
   &__wrap-img {
     align-self: center;
+    height: 25rem;
+  }
+  @include m.tablet {
+    &__wrap-img {
+      height: 40rem;
+    }
+  }
+  @include m.landscape {
+    &__container {
+      height: 64rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+    &__wrap-img {
+      height: auto;
+    }
+  }
+  &__img {
+    height: 100%;
   }
   &__data {
-    padding: 2rem;
     color: $color-white;
     backdrop-filter: blur(.2rem);
     text-shadow: .2rem .2rem .8rem rgba(0, 0, 0, .8);
   }
+  @include m.tablet {
+    &__data {
+      padding: 0 2rem;
+    }
+  }
+  @include m.landscape {
+    &__data {
+      padding: 2rem;
+    }
+  }
+
   &__header {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
     align-items: center;
     gap: 1rem;
+  }
+  @include m.tablet {
+    &__header {
+      flex-direction: row;
+      justify-content: space-between;
+      gap: 3rem;
+    }
   }
   :is(&__btn-favorites, &__btn-back)  {
     @include m.custom-button($color-white, $color-black);
@@ -48,10 +81,12 @@
     gap: 1rem;
   }
   &__name {
-    font-size: 5rem;
+    font-size: 4rem;
+    margin: 0;
   }
   &__info {
-    font-size: 2rem;
+    margin-top: 2rem;
+    font-size: 1.6rem;
     background: rgba(0, 0, 0, .5);
     border-radius: 1rem;
     padding: 1.5rem;
@@ -60,8 +95,27 @@
     color: $color-yellow;
   }
   &__actions {
-    margin-top: 3rem;
+    margin-top: 2rem;
     display: flex;
     justify-content: center;
+  }
+  @include m.tablet {
+    &__name {
+      padding: 4rem 0;
+      font-size: 5rem;
+    }
+    &__info {
+      margin-top: 0;
+      font-size: 2rem;
+    }
+    &__actions {
+      margin-top: 3rem;
+    }
+  }
+}
+@include m.landscape {
+  .view-planet {
+    display: grid;
+    place-content: center;
   }
 }

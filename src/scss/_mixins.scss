@@ -1,26 +1,17 @@
 @use 'variables' as *;
 
 // Media Queries
-@mixin smartphone {
-  @media (min-width: $smartphone) {
-      @content;
-  }
-}
 @mixin tablet {
   @media (min-width: $tablet) {
       @content;
   }
 }
-@mixin laptop {
-  @media (min-width: $laptop) {
+@mixin landscape {
+  @media (min-width: $landscape) {
       @content;
   }
 }
-@mixin desktop {
-  @media (min-width: $desktop) {
-      @content;
-  }
-}
+
 
 @mixin custom-button($background, $text-color) {
   background-color: $background;

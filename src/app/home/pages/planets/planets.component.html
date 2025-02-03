@@ -12,7 +12,7 @@
     </header>
 
     <div class="planets__list">
-      <swiper-container #swiper slides-per-view="5" space-between="20">
+      <swiper-container init="false">
         @if (isLoadingResults()) {
           <div class="loader">
             <app-loader />
@@ -32,6 +32,7 @@
     </div>
     <div class="planets__actions">
       <button (click)="handlePrevButton()" [disabled]="isPrevDisabled()">Anterior</button>
+      <button (click)="handleResetFilters()">Restablecer</button>
       <button (click)="handleNextButton()" [disabled]="isNextDisabled()">Siguiente</button>
     </div>
   </main>

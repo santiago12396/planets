@@ -1,9 +1,9 @@
+import { Observable } from 'rxjs';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 
 import { environment } from 'src/environments/environment';
 import { Body, BodyResponse, Filter, Order } from '../models';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -21,15 +21,12 @@ export class SolarSystemService {
       query = '',
     } = filter;
 
-    const filters = ['isPlanet,eq,true', `${sortBy},cs,${query}`];
-
     let params = new HttpParams()
       .set('order', `${sortBy},${order}`)
-      .set('page', `${currentPage},${limit}`);
+      .set('page', `${currentPage},${limit}`)
+      .set('filter[]', 'isPlanet,eq,true');
 
-    filters.forEach(filter => {
-      params = params.append('filter[]', filter);
-    });
+    if (query) params = params.append('filter[]', `${sortBy},cs,${query}`);
 
     return this.#http.get<BodyResponse>(`${this.#apiUrl}/bodies`, { params });
   }

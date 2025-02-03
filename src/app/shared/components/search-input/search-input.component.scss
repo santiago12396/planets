@@ -1,7 +1,13 @@
 @use 'mixins' as m;
 
 :host {
-  margin-left: auto;
+  width: 100%;
+}
+@include m.tablet {
+  :host {
+    width: auto;
+    margin-left: auto;
+  }
 }
 input {
   width: 100%;
@@ -9,6 +15,7 @@ input {
   border: .1rem solid #ccc;
   border-radius: 1rem;
 }
+
 @include m.tablet {
   input {
     width: 32rem;

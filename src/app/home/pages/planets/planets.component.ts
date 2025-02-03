@@ -9,16 +9,13 @@ import {
   switchMap,
 } from 'rxjs';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
   inject,
   linkedSignal,
   OnInit,
   signal,
-  viewChild,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -28,6 +25,7 @@ import { LoaderComponent } from '@/shared/components/loader/loader.component';
 import { SearchInputComponent } from '@/shared/components/search-input/search-input.component';
 import { OrderByComponent } from '@/shared/components/order-by/order-by.component';
 import { Body, BodyResponse, Order } from '@/shared/models';
+import { SwiperOptions } from 'swiper/types';
 
 @Component({
   selector: 'app-planets',
@@ -37,8 +35,8 @@ import { Body, BodyResponse, Order } from '@/shared/models';
   changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-export default class PlanetsComponent implements OnInit, AfterViewInit {
-  readonly swiper = viewChild.required<ElementRef<unknown>>('swiper');
+export default class PlanetsComponent implements OnInit {
+  swiper = signal<SwiperContainer | null>(null);
 
   readonly #router = inject(Router);
   readonly #route = inject(ActivatedRoute);
@@ -48,6 +46,7 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
 
   isLoadingResults = signal(true);
   isFetching = signal(false);
+  hasMorePages = signal(true);
 
   currentPage = signal(1);
   limit = signal(5);
@@ -58,6 +57,8 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
   #searchSubject = new Subject<string>();
 
   constructor() {
+    this.#updateLimitBasedOnScreenSize();
+
     this.#route.queryParams.subscribe(params => {
       const { order, query } = params;
 
@@ -69,6 +70,7 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // Cuando se inicializa el componente
     this.#fetchAndSetPlanets();
+    this.#initSwiper();
 
     // Cuando cambia el buscador
     this.#searchSubject
@@ -83,12 +85,35 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
       });
   }
 
-  ngAfterViewInit(): void {
-    (this.swiper().nativeElement as SwiperContainer).initialize();
+  #updateLimitBasedOnScreenSize() {
+    const width = window.innerWidth;
+    let newLimit = 5;
+
+    if (width < 480) newLimit = 1;
+    else if (width < 768) newLimit = 2;
+    else if (width < 1024) newLimit = 3;
+    else if (width < 1280) newLimit = 4;
+
+    if (this.limit() !== newLimit) this.limit.set(newLimit);
   }
 
-  #noData() {
-    this.isLoadingResults.set(false);
+  #initSwiper() {
+    const swiper = document.querySelector('swiper-container') as SwiperContainer;
+    const swiperOptions: SwiperOptions = {
+      slidesPerView: 5,
+      spaceBetween: 20,
+      breakpoints: {
+        320: { slidesPerView: 1 },
+        480: { slidesPerView: 2 },
+        768: { slidesPerView: 3 },
+        1024: { slidesPerView: 4 },
+        1280: { slidesPerView: 5 },
+      },
+    };
+
+    Object.assign(swiper, swiperOptions);
+    this.swiper.set(swiper);
+    this.swiper()?.initialize();
   }
 
   #getFilter() {
@@ -101,6 +126,10 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
     };
   }
 
+  #noData() {
+    this.isLoadingResults.set(false);
+  }
+
   #loadData(): Observable<Body[]> {
     if (this.isFetching()) return EMPTY;
 
@@ -111,6 +140,7 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
       map((response: BodyResponse) => {
         this.isLoadingResults.set(false);
         this.isFetching.set(false);
+        this.hasMorePages.set(response.bodies.length === this.limit());
         return response.bodies;
       })
     );
@@ -132,6 +162,17 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
       },
       queryParamsHandling: 'merge', // Mantiene y actualiza solo los parametros que cambiaron
     });
+  }
+
+  handleResetFilters() {
+    this.currentPage.set(1);
+    this.sortBy.set('englishName');
+    this.order.set(Order.Asc);
+    this.query.set('');
+    this.hasMorePages.set(true);
+
+    this.#updateUrlParams();
+    this.#fetchAndSetPlanets();
   }
 
   handleSearchTerm(value: string) {
@@ -156,10 +197,10 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
 
   handlePrevButton() {
     if (this.currentPage() > 1 && !this.isFetching()) {
+      const swiperInstance = this.swiper()?.swiper;
+
       // Desplaza el carrusel 5 posiciones hacia atrás
-      (this.swiper().nativeElement as SwiperContainer).swiper.slideTo(
-        (this.currentPage() - 2) * this.limit()
-      );
+      swiperInstance?.slideTo((this.currentPage() - 2) * this.limit());
 
       this.currentPage.set(this.currentPage() - 1);
       this.#fetchAndSetPlanets();
@@ -168,10 +209,11 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
 
   handleNextButton() {
     if (!this.isFetching()) {
+      const swiperInstance = this.swiper()?.swiper;
       const currentPage = this.currentPage();
 
       // Desplaza el carrusel 5 posiciones hacia adelante
-      (this.swiper().nativeElement as SwiperContainer).swiper.slideTo(currentPage * this.limit());
+      swiperInstance?.slideTo(currentPage * this.limit());
 
       this.currentPage.set(currentPage + 1);
       this.#fetchAndSetPlanets();
@@ -183,6 +225,6 @@ export default class PlanetsComponent implements OnInit, AfterViewInit {
   }
 
   isNextDisabled(): boolean {
-    return this.planets().length < this.limit() || this.planets().length === 0;
+    return !this.hasMorePages() || this.planets().length === 0;
   }
 }
