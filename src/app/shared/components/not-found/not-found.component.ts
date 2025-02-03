@@ -6,7 +6,7 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [RouterLink],
   template: `
-    <div class="not-found__container">
+    <div class="container">
       <h1 class="not-found__title">404 – Página no encontrada</h1>
       <p class="not-found__text">La página que estás buscando no existe o ha sido movida.</p>
       <a class="not-found__link" routerLink="/">Ir a la página de inicio</a>
@@ -15,12 +15,12 @@ import { RouterLink } from '@angular/router';
   styles: `
     @use 'variables' as *;
 
+    .container {
+      width: 100%;
+      color: $color-white;
+      text-align: center;
+    }
     .not-found {
-      &__container {
-        width: 100%;
-        color: $color-white;
-        text-align: center;
-      }
       &__title {
         font-size: 3.6rem;
       }

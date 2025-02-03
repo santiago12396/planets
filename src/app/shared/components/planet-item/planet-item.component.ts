@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { Body } from '@/shared/models/system-solar.model';
 import { Router } from '@angular/router';
+import { Body } from '@/shared/models/system-solar.model';
 
 @Component({
   selector: 'app-planet-item',

@@ -16,6 +16,14 @@
   fill: red;
   transform: scale(1.1);
 }
+@include m.landscape {
+  .container {
+    height: 64rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
 .view-planet {
   height: 100dvh;
 
@@ -29,12 +37,6 @@
     }
   }
   @include m.landscape {
-    &__container {
-      height: 64rem;
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
-    }
     &__wrap-img {
       height: auto;
     }

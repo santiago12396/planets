@@ -1,5 +1,5 @@
 <div class="planets">
-  <main class="planets__container">
+  <main class="container">
     <header class="planets__header">
       <app-order-by
         [disabled]="planets().length === 0"
@@ -11,7 +11,7 @@
       <app-search-input [searchTerm]="query()" (searchTermChange)="handleSearchTerm($event)" />
     </header>
 
-    <div class="planets__list">
+    <div class="planets__list" [@cardsIn]="planets()">
       <swiper-container init="false">
         @if (isLoadingResults()) {
           <div class="loader">

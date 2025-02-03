@@ -1,4 +1,5 @@
 import type { SwiperContainer } from 'swiper/element';
+import { SwiperOptions } from 'swiper/types';
 import {
   debounceTime,
   distinctUntilChanged,
@@ -18,6 +19,7 @@ import {
   signal,
 } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { animate, query, stagger, style, transition, trigger } from '@angular/animations';
 
 import { SolarSystemService } from '@/shared/services/solar-system.service';
 import { PlanetItemComponent } from '@/shared/components/planet-item/planet-item.component';
@@ -25,7 +27,6 @@ import { LoaderComponent } from '@/shared/components/loader/loader.component';
 import { SearchInputComponent } from '@/shared/components/search-input/search-input.component';
 import { OrderByComponent } from '@/shared/components/order-by/order-by.component';
 import { Body, BodyResponse, Order } from '@/shared/models';
-import { SwiperOptions } from 'swiper/types';
 
 @Component({
   selector: 'app-planets',
@@ -34,6 +35,20 @@ import { SwiperOptions } from 'swiper/types';
   styleUrl: './planets.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
+  animations: [
+    trigger('cardsIn', [
+      transition('* => *', [
+        query(
+          ':enter',
+          [
+            style({ opacity: 0, transform: 'scale(.8)' }),
+            stagger(100, [animate('400ms ease-in', style({ opacity: 1, transform: 'scale(1)' }))]),
+          ],
+          { optional: true }
+        ),
+      ]),
+    ]),
+  ],
 })
 export default class PlanetsComponent implements OnInit {
   swiper = signal<SwiperContainer | null>(null);

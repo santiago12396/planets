@@ -16,4 +16,8 @@ export default [
     pathMatch: 'full',
     redirectTo: 'planetas',
   },
+  {
+    path: '**',
+    redirectTo: 'planetas',
+  },
 ] as Routes;
