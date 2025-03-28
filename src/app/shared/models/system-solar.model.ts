@@ -6,36 +6,13 @@ export interface Body {
   id: string;
   name: string;
   englishName: string;
-  isPlanet: boolean;
   moons: Moon[] | null;
-  semimajorAxis: number;
-  perihelion: number;
-  aphelion: number;
-  eccentricity: number;
-  inclination: number;
   mass: Mass | null;
-  vol: Vol | null;
-  density: number;
-  gravity: number;
-  escape: number;
+  avgTemp: number;
   meanRadius: number;
-  equaRadius: number;
-  polarRadius: number;
-  flattening: number;
-  dimension: string;
+  gravity: number;
   sideralOrbit: number;
   sideralRotation: number;
-  aroundPlanet: AroundPlanet | null;
-  discoveredBy: string;
-  discoveryDate: string;
-  alternativeName: string;
-  axialTilt: number;
-  avgTemp: number;
-  mainAnomaly: number;
-  argPeriapsis: number;
-  longAscNode: number;
-  bodyType: BodyType;
-  rel: string;
 }
 
 export interface AroundPlanet {
